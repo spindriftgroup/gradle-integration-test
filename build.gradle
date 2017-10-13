@@ -1,22 +1,24 @@
 buildscript {
   repositories {
+    jcenter()
     maven {
       url "https://plugins.gradle.org/m2/"
     }
   }
   dependencies {
     classpath "com.gradle.publish:plugin-publish-plugin:0.9.8"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3"
   }
 }
 
 apply plugin: "com.gradle.plugin-publish"
 
 group 'com.spindrift'
-version '1.0-SNAPSHOT'
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 apply plugin: 'idea'
+apply plugin: "com.jfrog.bintray"
 
 repositories {
   jcenter()
@@ -55,16 +57,41 @@ task wrapper(type: Wrapper) {
   gradleVersion = "2.14.1"
 }
 
+//Gradle plugin portal publishing
 pluginBundle {
   website = 'http://spindriftgroup.com/'
   vcsUrl = 'https://github.com/spindriftgroup/gradle-integration-test'
   description = 'Integration test source set and task configuration.'
-  tags = ['gradle', 'integration', 'test', 'spindrift', 'atg']
+  tags = ['integration-test', 'integration', 'test', 'spindrift', 'atg']
+  group = "com.spindrift"
 
   plugins {
     integrationTest {
       id = 'com.spindrift.integration-test'
       displayName = 'Gradle integration test plugin'
+    }
+  }
+  mavenCoordinates {
+    groupId = "com.spindrift"
+  }
+}
+
+//Bintray publishing (based on maven-publishing configuration)
+bintray {
+  user = "$BINTRAY_USER"
+  key = "$BINTRAY_API_KEY"
+  publications = ['mavenGroovy']
+  pkg {
+    repo = 'gradle-plugins'
+    name = "integration-test"
+    licenses = ['Apache-2.0']
+    vcsUrl = 'https://github.com/spindriftgroup/gradle-integration-test'
+    version {
+      name = project.version
+      desc = "Gradle integration test plugin ${project.version}"
+      released = new Date()
+      vcsTag = project.version
+      attributes = ['gradle-plugin':'com.spindrift:integration-test']
     }
   }
 }

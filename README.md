@@ -61,6 +61,16 @@ Example configuration overrides
   }
 ```
 
+Build Notes
+===========
+
+1. Maven local installation  
+`gradle or gradle publishToMavenlocal`  
+2. Publishing to Plugin portal  
+`gradle clean build -Prelease=true publishPlugins`  
+3. Publishing to Bintray JCenter  
+`gradle clean build -Prelease=true bintrayUpload`  
+
 Versions
 ========
 
