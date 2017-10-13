@@ -38,6 +38,7 @@ class IntegrationTestPlugin implements Plugin<Project> {
 
     configureSourceSets(project)
     configureMainSourceDependency(project)
+    addOptionalRuntimeDependency(project)
     addIntegrationTestTask(project,INTEGRATION_TEST_TASK)
     addOptionalCheckDependency(project)
     addOptionalMustRunAfterTestDependency(project)
@@ -47,8 +48,8 @@ class IntegrationTestPlugin implements Plugin<Project> {
   private configureSourceSets(Project project) {
     project.sourceSets {
       integrationTest {
-        java.srcDir project.file(project.getAt(PLUGIN_EXTENSION_NAME).javaSourceDir)
-        resources.srcDir project.file(project.getAt(PLUGIN_EXTENSION_NAME).resourcesSourceDir)
+        java.srcDir project.file(project[PLUGIN_EXTENSION_NAME].javaSourceDir)
+        resources.srcDir project.file(project[PLUGIN_EXTENSION_NAME].resourcesSourceDir)
       }
     }
   }
@@ -59,6 +60,16 @@ class IntegrationTestPlugin implements Plugin<Project> {
     }
   }
 
+  private addOptionalRuntimeDependency(Project project) {
+    project.afterEvaluate {
+      if (project[PLUGIN_EXTENSION_NAME].runtimeDependsOnTestRuntime) {
+        project.dependencies {
+          integrationTestRuntime(project.configurations.testRuntime)
+        }
+      }
+    }
+  }
+
   private addIntegrationTestTask(Project project, String taskName) {
     Task task = project.getTasks().create(taskName,Test)
     task.setDependsOn([JAR_TASK])
@@ -66,18 +77,14 @@ class IntegrationTestPlugin implements Plugin<Project> {
     task.setGroup(INTEGRATION_TEST_TASK_GROUP)
 
 
-    task.testClassesDirs = project.sourceSets.integrationTest.output
+    task.testClassesDir = project.sourceSets.integrationTest.output.classesDir
     task.classpath = project.sourceSets.integrationTest.runtimeClasspath
-    task.systemProperties[JAR_PATH_SYSTEM_PROPERTY] = project.tasks.jar.archivePath
-//      task.reports {
-//        html.destination = project.file("${project.buildDir}/${project.getAt(PLUGIN_EXTENSION_NAME).htmlReportsDestination}")
-//        junitXml.destination = project.file("${project.reports.junitXml.destination}/${project.getAt(PLUGIN_EXTENSION_NAME).junitXmlReportsDestination}")
-//      }
+    task.systemProperty(JAR_PATH_SYSTEM_PROPERTY,project.tasks.jar.archivePath)
   }
 
   private addOptionalCheckDependency(Project project) {
     project.afterEvaluate {
-      if (project.getAt(PLUGIN_EXTENSION_NAME).checkDependsOnIntegrationTest) {
+      if (project[PLUGIN_EXTENSION_NAME].checkDependsOnIntegrationTest) {
         project.check.dependsOn "${INTEGRATION_TEST_TASK}"
       }
     }
@@ -85,7 +92,7 @@ class IntegrationTestPlugin implements Plugin<Project> {
 
   private addOptionalMustRunAfterTestDependency(Project project) {
     project.afterEvaluate {
-      if (project.getAt(PLUGIN_EXTENSION_NAME).mustRunAfterTest) {
+      if (project[PLUGIN_EXTENSION_NAME].mustRunAfterTest) {
         project.tasks."${INTEGRATION_TEST_TASK}".mustRunAfter TEST_TASK
       }
     }

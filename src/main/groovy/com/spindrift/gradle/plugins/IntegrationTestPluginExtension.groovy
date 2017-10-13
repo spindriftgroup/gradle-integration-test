@@ -26,14 +26,9 @@ class IntegrationTestPluginExtension {
     this.resourcesSourceDir = resourcesSourceDir
   }
 
-  String htmlReportsDestination = 'reports/integration-tests'
-  void htmlReportsDestination(String htmlReportsDestination) {
-    this.htmlReportsDestination = htmlReportsDestination
-  }
-
-  String junitXmlReportsDestination = 'integration-test'
-  void junitXmlReportsDestination(String junitXmlReportsDestination) {
-    this.junitXmlReportsDestination = junitXmlReportsDestination
+  boolean runtimeDependsOnTestRuntime = true
+  void runtimeDependsOnTestRuntime(boolean runtimeDependsOnTestRuntime) {
+    this.runtimeDependsOnTestRuntime = runtimeDependsOnTestRuntime
   }
 
   boolean checkDependsOnIntegrationTest = true
