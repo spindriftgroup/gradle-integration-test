@@ -15,7 +15,7 @@ import org.gradle.api.Task
 import org.gradle.api.tasks.testing.Test
 
 /**
- * Adds integration-test configuration to a gradle project
+ * Adds an integration test task and configuration to a gradle project.
  * Configuration defaults and overrides are made via the gradle extension mechanism
  *
  * @author hallatech
@@ -25,20 +25,23 @@ class IntegrationTestPlugin implements Plugin<Project> {
 
   static final String PLUGIN_EXTENSION_NAME="integrationTest"
   static final String INTEGRATION_TEST_TASK="integrationTest"
-  static final String TEST_TASK="test"
   static final String INTEGRATION_TEST_TASK_DESCRIPTION="Runs the integration tests."
   static final String INTEGRATION_TEST_TASK_GROUP="Verification"
   static final String JAR_PATH_SYSTEM_PROPERTY="jar.path"
-  static final String JAR_TASK="jar"
+  static final String CLASSES_TASK="classes"
+  static final String TEST_TASK="test"
+  static final String INTEGRATION_TEST_CLASSES_TASK="integrationTestClasses"
+  static final String DEFAULT_OUTPUT_DIR="integration-test"
+  static final String HTML_DESTINATION_DIR="reports/${DEFAULT_OUTPUT_DIR}"
 
   @Override
-  public void apply(Project project) {
+  void apply(Project project) {
 
     project.extensions."${PLUGIN_EXTENSION_NAME}" = new IntegrationTestPluginExtension()
 
     configureSourceSets(project)
     configureMainSourceDependency(project)
-    addOptionalRuntimeDependency(project)
+    addDefaultRuntimeDependency(project)
     addIntegrationTestTask(project,INTEGRATION_TEST_TASK)
     addOptionalCheckDependency(project)
     addOptionalMustRunAfterTestDependency(project)
@@ -47,9 +50,14 @@ class IntegrationTestPlugin implements Plugin<Project> {
 
   private configureSourceSets(Project project) {
     project.sourceSets {
-      integrationTest {
-        java.srcDir project.file(project[PLUGIN_EXTENSION_NAME].javaSourceDir)
-        resources.srcDir project.file(project[PLUGIN_EXTENSION_NAME].resourcesSourceDir)
+      integrationTest
+    }
+    project.afterEvaluate {
+      project.sourceSets {
+        integrationTest {
+          java.srcDir project.file(project[PLUGIN_EXTENSION_NAME].javaSourceDir)
+          resources.srcDir project.file(project[PLUGIN_EXTENSION_NAME].resourcesSourceDir)
+        }
       }
     }
   }
@@ -60,26 +68,25 @@ class IntegrationTestPlugin implements Plugin<Project> {
     }
   }
 
-  private addOptionalRuntimeDependency(Project project) {
-    project.afterEvaluate {
-      if (project[PLUGIN_EXTENSION_NAME].runtimeDependsOnTestRuntime) {
-        project.dependencies {
-          integrationTestRuntime(project.configurations.testRuntime)
-        }
-      }
+  private addDefaultRuntimeDependency(Project project) {
+    project.dependencies {
+      integrationTestRuntime(project.configurations.testRuntime)
     }
   }
 
   private addIntegrationTestTask(Project project, String taskName) {
     Task task = project.getTasks().create(taskName,Test)
-    task.setDependsOn([JAR_TASK])
+    task.setDependsOn([CLASSES_TASK,INTEGRATION_TEST_CLASSES_TASK,])
     task.setDescription(INTEGRATION_TEST_TASK_DESCRIPTION)
     task.setGroup(INTEGRATION_TEST_TASK_GROUP)
 
 
     task.testClassesDir = project.sourceSets.integrationTest.output.classesDir
     task.classpath = project.sourceSets.integrationTest.runtimeClasspath
-    task.systemProperty(JAR_PATH_SYSTEM_PROPERTY,project.tasks.jar.archivePath)
+    task.systemProperty(JAR_PATH_SYSTEM_PROPERTY, project.tasks.jar.archivePath)
+    task.reports.html.destination = project.file("${project.buildDir}/${HTML_DESTINATION_DIR}")
+    task.reports.junitXml.destination  = project.file("${task.reports.junitXml.destination}/${DEFAULT_OUTPUT_DIR}")
+
   }
 
   private addOptionalCheckDependency(Project project) {

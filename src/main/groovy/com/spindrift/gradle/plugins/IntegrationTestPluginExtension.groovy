@@ -4,7 +4,7 @@ package com.spindrift.gradle.plugins
  * All properties can be set directly or using its DSL equivalent
  * e.g.
  * <code>
- * integration-test {
+ * integrationTest {
  *   javaSourceDir='path/to/java' //Direct setting
  *   javaSourceDir 'path/to/java' //Optional DSL style setting
  * }
@@ -24,11 +24,6 @@ class IntegrationTestPluginExtension {
   String resourcesSourceDir = 'src/integration-test/resources'
   void resourcesSourceDir(String resourcesSourceDir) {
     this.resourcesSourceDir = resourcesSourceDir
-  }
-
-  boolean runtimeDependsOnTestRuntime = true
-  void runtimeDependsOnTestRuntime(boolean runtimeDependsOnTestRuntime) {
-    this.runtimeDependsOnTestRuntime = runtimeDependsOnTestRuntime
   }
 
   boolean checkDependsOnIntegrationTest = true
