@@ -66,7 +66,7 @@ Versions
 
 Version | Gradle Build Version | Compatible With 
 ------- | -------------------- | ---------------
-1.0     | 2.14.1 | 2.14, not tested with 3.x, 4.x  
+1.0.0   | 2.14.1 | 2.14, not tested with 3.x, 4.x  
   
 
 
