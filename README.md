@@ -49,7 +49,8 @@ mustRunAfterTest | true | Optionally sets integration tests to run after unit te
 
 **_Note_** All configuration is applied post evaluation of the task graph generation.
 
-###Example configuration overrides
+Example configuration overrides
+===============================
 
 ```$xslt
   integrationTest {
