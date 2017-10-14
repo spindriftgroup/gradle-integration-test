@@ -1,3 +1,7 @@
+1.1.1
+=====
+- Version change only as portal publishing failed for 1.1.0
+
 1.1.0
 =====
 - Set source and target compatibility to ensure it runs on JDK6
