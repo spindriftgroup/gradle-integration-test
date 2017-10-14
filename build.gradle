@@ -37,7 +37,8 @@ if (!hasProperty('release') || (hasProperty('release') && release!='true')) {
   project.version+='-SNAPSHOT'
 }
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
 defaultTasks 'publishToMavenLocal'
 publishToMavenLocal.dependsOn 'build'

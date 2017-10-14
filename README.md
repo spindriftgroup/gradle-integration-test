@@ -14,7 +14,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.spindrift:integration-test:1.0.0"
+    classpath "com.spindrift:integration-test:1.1.0"
   }
 }
 
@@ -74,9 +74,7 @@ Build Notes
 Versions
 ========
 
-Version | Gradle Build Version | Compatible With 
-------- | -------------------- | ---------------
-1.0.0   | 2.14.1 | 2.14, not tested with 3.x, 4.x  
+See CHANGELOG
   
 
 
