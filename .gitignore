@@ -1,6 +1,7 @@
 .gradle/
 .idea/
 build/
-integration-test.iml
-integration-test.ipr
-integration-test.iws
+
+*.iml
+*.ipr
+*.iws

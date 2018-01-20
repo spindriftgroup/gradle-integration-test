@@ -14,7 +14,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.spindrift:integration-test:1.1.1"
+    classpath "com.spindrift:integration-test:1.2.0"
   }
 }
 
