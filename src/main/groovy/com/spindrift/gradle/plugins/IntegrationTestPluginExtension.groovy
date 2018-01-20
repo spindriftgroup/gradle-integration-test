@@ -51,6 +51,11 @@ class IntegrationTestPluginExtension {
     this.resourcesSourceDir = resourcesSourceDir
   }
 
+  boolean runtimeDependsOnTestRuntime = true
+  void runtimeDependsOnTestRuntime(boolean runtimeDependsOnTestRuntime) {
+    this.runtimeDependsOnTestRuntime = runtimeDependsOnTestRuntime
+  }
+
   boolean checkDependsOnIntegrationTest = true
   void checkDependsOnIntegrationTest(boolean checkDependsOnIntegrationTest) {
     this.checkDependsOnIntegrationTest = checkDependsOnIntegrationTest

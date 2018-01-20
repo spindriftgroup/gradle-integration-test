@@ -41,7 +41,7 @@ class IntegrationTestPlugin implements Plugin<Project> {
 
     configureSourceSets(project)
     configureMainSourceDependency(project)
-    addDefaultRuntimeDependency(project)
+    addOptionalRuntimeDependency(project)
     addIntegrationTestTask(project,INTEGRATION_TEST_TASK)
     addOptionalCheckDependency(project)
     addOptionalMustRunAfterTestDependency(project)
@@ -68,9 +68,13 @@ class IntegrationTestPlugin implements Plugin<Project> {
     }
   }
 
-  private addDefaultRuntimeDependency(Project project) {
-    project.dependencies {
-      integrationTestRuntime(project.configurations.testRuntime)
+  private addOptionalRuntimeDependency(Project project) {
+    project.afterEvaluate {
+      if (project[PLUGIN_EXTENSION_NAME].runtimeDependsOnTestRuntime) {
+        project.dependencies {
+          integrationTestRuntime(project.configurations.testRuntime)
+        }
+      }
     }
   }
 

@@ -7,6 +7,7 @@ The setTestClassesDir(File) method has been deprecated and is scheduled to be re
         at integration_test_8pbkub9sxaxbewek8v450fnlp$_run_closure1.doCall(/home/vagrant/workspace/common/buildtools/gradle/integration-test.gradle:3)
         (Run with --stacktrace to get the full stack trace of this deprecation warning.)
 ```
+- Make integrationTestRuntime dependency on testRuntime optional (was fixed in previous release)
 
 1.1.1
 =====

@@ -31,6 +31,7 @@ Default Configuration
 
 - The task name is integrationTest and is not modifiable
 - Sets an integrationTestRuntime dependency on the testRuntime for convenience.  
+  This is optional but defaults to true and can be overridden if not required.  
   Additional compile and runtime dependencies must be set in the build configuration as normal
 - Sets a dependency from the default check task on integrationTest (configurable below).
 - Sets a dependency between the integrationTest task and its related compile task and the main source compile task.
@@ -43,7 +44,8 @@ Optional Configuration
 Property | Default Value | Description  
 -------- | ------------- | -----------  
 javaSourceDir | `src/integration-test/java` | The sourceSet source path  
-resourcesSourceDir | `src/integration-test/resources` | The sourceSet resources path   
+resourcesSourceDir | `src/integration-test/resources` | The sourceSet resources path  
+runtimeDependsOnTestRuntime | `true` | Optionally sets the integrationTest runtime dependencies to include normal test runtime.   
 checkDependsOnIntegrationTest | `true` | Optionally sets the check task to depend on integrationsTest  
 mustRunAfterTest | `true` | Optionally sets integration tests to run after unit tests  
 
@@ -56,6 +58,7 @@ Example configuration overrides
   integrationTest {
     javaSourceDir 'src/intTest/java'
     resourcesSourceDir 'src/intTest/resources'
+    runtimeDependsOnTestRuntime false
     checkDependsOnIntegrationTest false
     mustRunAfterTest false
   }
