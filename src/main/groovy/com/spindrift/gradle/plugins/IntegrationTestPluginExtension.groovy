@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012-2017 Spindrift B.V. All Rights Reserved
+ * Copyright (C) 2012-2018 Spindrift B.V. All Rights Reserved
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,6 +49,11 @@ class IntegrationTestPluginExtension {
   String resourcesSourceDir = 'src/integration-test/resources'
   void resourcesSourceDir(String resourcesSourceDir) {
     this.resourcesSourceDir = resourcesSourceDir
+  }
+
+  boolean runtimeDependsOnTestRuntime = true
+  void runtimeDependsOnTestRuntime(boolean runtimeDependsOnTestRuntime) {
+    this.runtimeDependsOnTestRuntime = runtimeDependsOnTestRuntime
   }
 
   boolean checkDependsOnIntegrationTest = true

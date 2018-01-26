@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012-2017 Spindrift B.V. All Rights Reserved
+ * Copyright (C) 2012-2018 Spindrift B.V. All Rights Reserved
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,7 +41,7 @@ class IntegrationTestPlugin implements Plugin<Project> {
 
     configureSourceSets(project)
     configureMainSourceDependency(project)
-    addDefaultRuntimeDependency(project)
+    addOptionalRuntimeDependency(project)
     addIntegrationTestTask(project,INTEGRATION_TEST_TASK)
     addOptionalCheckDependency(project)
     addOptionalMustRunAfterTestDependency(project)
@@ -68,9 +68,13 @@ class IntegrationTestPlugin implements Plugin<Project> {
     }
   }
 
-  private addDefaultRuntimeDependency(Project project) {
-    project.dependencies {
-      integrationTestRuntime(project.configurations.testRuntime)
+  private addOptionalRuntimeDependency(Project project) {
+    project.afterEvaluate {
+      if (project[PLUGIN_EXTENSION_NAME].runtimeDependsOnTestRuntime) {
+        project.dependencies {
+          integrationTestRuntime(project.configurations.testRuntime)
+        }
+      }
     }
   }
 
@@ -81,7 +85,7 @@ class IntegrationTestPlugin implements Plugin<Project> {
     task.setGroup(INTEGRATION_TEST_TASK_GROUP)
 
 
-    task.testClassesDir = project.sourceSets.integrationTest.output.classesDir
+    task.testClassesDirs = project.sourceSets.integrationTest.output.classesDirs
     task.classpath = project.sourceSets.integrationTest.runtimeClasspath
     task.systemProperty(JAR_PATH_SYSTEM_PROPERTY, project.tasks.jar.archivePath)
     task.reports.html.destination = project.file("${project.buildDir}/${HTML_DESTINATION_DIR}")
